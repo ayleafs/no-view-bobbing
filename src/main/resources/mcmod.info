@@ -1,0 +1,12 @@
+[
+  {
+    "modid": "boilerplate",
+    "name": "Boilerplate Mod",
+    "description": "Example placeholder mod.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "authorList": [
+      "leafs"
+    ]
+  }
+]
