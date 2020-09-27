@@ -1,8 +1,8 @@
 [
   {
-    "modid": "boilerplate",
-    "name": "Boilerplate Mod",
-    "description": "Example placeholder mod.",
+    "modid": "no-view-bobbing",
+    "name": "No View Bobbing",
+    "description": "Gets rid of the camera bobbing while view bobbing is enabled.",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "authorList": [
