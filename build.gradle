@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "1.0"
 group = "me.leafs"
-archivesBaseName = "boilerplate"
+archivesBaseName = "no-view-bobbing"
 
 sourceCompatibility = targetCompatibility = 1.8 // use java8
 compileJava.options.encoding = "UTF-8"
@@ -57,10 +57,10 @@ processResources {
 }
 
 // use if making ASM mod
-/*jar {
+jar {
     manifest {
-        attributes "FMLCorePlugin": "me.leafs.boiler.asm.FMLLoadingPlugin",
+        attributes "FMLCorePlugin": "me.leafs.nobob.asm.FMLLoadingPlugin",
             "FMLCorePluginContainsFMLMod": true,
             "ModSide": "CLIENT"
     }
-}*/
+}

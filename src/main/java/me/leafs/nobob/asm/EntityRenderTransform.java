@@ -7,6 +7,9 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ListIterator;
 
 public class EntityRenderTransform implements IClassTransformer {
@@ -23,7 +26,8 @@ public class EntityRenderTransform implements IClassTransformer {
         reader.accept(node, 0);
 
         for (MethodNode method : node.methods) {
-            String methodName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(node.name, method.name, method.desc);
+            FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
+            String methodName = remapper.mapMethodName(node.name, method.name, method.desc);
             if (!methodName.equals("setupCameraTransform") && !methodName.equals("func_78479_a")) {
                 continue;
             }
@@ -34,7 +38,8 @@ public class EntityRenderTransform implements IClassTransformer {
 
             while (iterator.hasNext()) {
                 AbstractInsnNode insn = iterator.next();
-                if (!(insn instanceof JumpInsnNode)) {
+                // find if statement with viewBobbing boolean used as the condition
+                if (!(insn instanceof JumpInsnNode) || insn.getOpcode() != Opcodes.IFEQ) {
                     continue;
                 }
 
@@ -44,9 +49,11 @@ public class EntityRenderTransform implements IClassTransformer {
                 }
 
                 FieldInsnNode prevField = (FieldInsnNode) previous;
+                // get the mapped name (the usable one)
+                String prevFieldName = remapper.mapFieldName(prevField.owner, prevField.name, prevField.desc);
 
                 // find bobbing check in camera renderer
-                if (prevField.name.equals("viewBobbing") || prevField.name.equals("field_74336_f")) {
+                if (prevFieldName.equals("viewBobbing") || prevFieldName.equals("field_74336_f")) {
                     InsnList falsify = new InsnList();
 
                     // inject `&& false` into if statement to make sure always false
